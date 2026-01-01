@@ -1,0 +1,19 @@
+<div class="rounded-lg bg-white shadow-sm w-full">
+  <ul class="divide-y">
+    <% expenses.each do |e| %>
+      <li class="flex justify-between px-6 py-4 items-center">
+        <div>
+          <div class="font-medium"><%= e.category.name %></div>
+          <div class="text-sm text-gray-500">
+            <%= e.date.strftime("%b %d, %Y") %>
+            <%= e.note.present? ? "— #{e.note}" : "" %>
+          </div>
+        </div>
+
+        <div class="font-semibold">
+          <%= number_to_currency(e.amount) %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+</div>

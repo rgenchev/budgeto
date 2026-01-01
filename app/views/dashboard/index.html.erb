@@ -1,0 +1,97 @@
+<!-- app/views/dashboard/index.html.erb -->
+
+<div class="max-w-5xl mx-auto space-y-10 px-4 py-12">
+
+  <!-- Header -->
+  <div class="flex justify-between items-center">
+    <h1 class="text-2xl font-semibold">Dashboard</h1>
+  </div>
+
+  <!-- Month navigation -->
+<div class="flex justify-center items-center gap-4 mb-6">
+  <% prev_month = @current_date.prev_month %>
+  <% next_month = @current_date.next_month %>
+
+  <%= link_to "← #{prev_month.strftime('%b %Y')}", dashboard_path(month: prev_month.month, year: prev_month.year),
+        class: "text-gray-600 hover:text-black font-medium" %>
+
+  <span class="font-semibold text-gray-900"><%= @current_date.strftime("%B %Y") %></span>
+
+  <%= link_to "#{next_month.strftime('%b %Y')} →", dashboard_path(month: next_month.month, year: next_month.year),
+        class: "text-gray-600 hover:text-black font-medium" %>
+</div>
+
+
+  <!-- Top Stats -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="rounded-lg bg-white p-6 shadow-sm">
+      <div class="text-sm text-gray-500">Total this month</div>
+      <div class="mt-2 text-2xl font-semibold">
+        <%= number_to_currency(@total_this_month, unit: "€") %>
+      </div>
+    </div>
+
+    <div class="rounded-lg bg-white p-6 shadow-sm">
+      <div class="text-sm text-gray-500">Average per day</div>
+      <div class="mt-2 text-2xl font-semibold">
+        <%= number_to_currency(@daily.any? ? @total_this_month / @daily.size : 0, unit: "€") %>
+      </div>
+    </div>
+
+    <div class="rounded-lg bg-white p-6 shadow-sm">
+      <div class="text-sm text-gray-500">Days tracked</div>
+      <div class="mt-2 text-2xl font-semibold">
+        <%= @daily.size %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Spending by Category -->
+  <div class="rounded-lg bg-white shadow-sm">
+    <div class="border-b px-6 py-4 font-medium">
+      Spending by category
+    </div>
+
+    <ul class="divide-y">
+      <% @by_category.each do |name, sum| %>
+        <li class="flex justify-between px-6 py-3">
+          <span><%= name %></span>
+          <span class="font-medium"><%= number_to_currency(sum, unit: "€") %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <!-- Daily Spending -->
+  <div class="rounded-lg bg-white shadow-sm">
+    <div class="border-b px-6 py-4 font-medium">
+      Daily spending
+    </div>
+
+    <ul class="divide-y">
+      <% @daily.each do |date, sum| %>
+        <li class="flex justify-between px-6 py-3 text-sm">
+          <span class="text-gray-600"><%= date.strftime("%b %d") %></span>
+          <span><%= number_to_currency(sum, unit: "€") %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <!-- Monthly Spending -->
+  <div class="rounded-lg bg-white shadow-sm">
+    <div class="border-b px-6 py-4 font-medium">
+      Monthly spending
+    </div>
+
+    <ul class="divide-y">
+      <% @monthly_totals.each do |month, sum| %>
+        <li class="flex justify-between px-6 py-3 text-sm">
+          <span class="text-gray-600"><%= month %></span>
+          <span class="font-medium"><%= number_to_currency(sum, unit: "€") %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+</div>
