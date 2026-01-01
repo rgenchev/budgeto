@@ -27,14 +27,14 @@
     <div class="rounded-lg bg-white p-6 shadow-sm">
       <div class="text-sm text-gray-500">Total this month</div>
       <div class="mt-2 text-2xl font-semibold">
-        <%= number_to_currency(@total_this_month, unit: "€") %>
+        <%= number_to_eur(@total_this_month) %>
       </div>
     </div>
 
     <div class="rounded-lg bg-white p-6 shadow-sm">
       <div class="text-sm text-gray-500">Average per day</div>
       <div class="mt-2 text-2xl font-semibold">
-        <%= number_to_currency(@daily.any? ? @total_this_month / @daily.size : 0, unit: "€") %>
+        <%= number_to_eur(@daily.any? ? @total_this_month / @daily.size : 0) %>
       </div>
     </div>
 
@@ -56,7 +56,7 @@
       <% @by_category.each do |name, sum| %>
         <li class="flex justify-between px-6 py-3">
           <span><%= name %></span>
-          <span class="font-medium"><%= number_to_currency(sum, unit: "€") %></span>
+          <span class="font-medium"><%= number_to_eur(sum) %></span>
         </li>
       <% end %>
     </ul>
@@ -72,7 +72,7 @@
       <% @daily.each do |date, sum| %>
         <li class="flex justify-between px-6 py-3 text-sm">
           <span class="text-gray-600"><%= date.strftime("%b %d") %></span>
-          <span><%= number_to_currency(sum, unit: "€") %></span>
+          <span><%= number_to_eur(sum) %></span>
         </li>
       <% end %>
     </ul>
@@ -88,7 +88,7 @@
       <% @monthly_totals.each do |month, sum| %>
         <li class="flex justify-between px-6 py-3 text-sm">
           <span class="text-gray-600"><%= month %></span>
-          <span class="font-medium"><%= number_to_currency(sum, unit: "€") %></span>
+          <span class="font-medium"><%= number_to_eur(sum) %></span>
         </li>
       <% end %>
     </ul>
