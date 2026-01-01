@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resource :session
+  resources :passwords, param: :token
   get "categories/index"
   get "categories/new"
   get "categories/edit"
