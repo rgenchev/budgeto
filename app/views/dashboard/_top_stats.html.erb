@@ -1,0 +1,15 @@
+<div class="flex justify-center space-x-6 mb-5">
+  <div class="rounded-lg bg-white p-6 shadow-sm">
+    <div class="text-sm text-gray-500">Total this month</div>
+    <div class="mt-2 text-2xl font-semibold">
+      <%= number_to_eur(total_this_month) %>
+    </div>
+  </div>
+
+  <div class="rounded-lg bg-white p-6 shadow-sm">
+    <div class="text-sm text-gray-500">Days tracked</div>
+    <div class="mt-2 text-2xl font-semibold">
+      <%= daily.size %>
+    </div>
+  </div>
+</div>

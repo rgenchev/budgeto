@@ -26,13 +26,5 @@ class DashboardController < ApplicationController
       .group(:date)
       .sum(:amount)
       .sort.reverse
-
-    # Monthly totals for the year of the current month
-    year_range = @current_date.beginning_of_year..@current_date.end_of_year
-
-    @monthly_totals = Expense
-      .where(date: year_range)
-      .group_by_month(:date, format: "%b")
-      .sum(:amount)
   end
 end

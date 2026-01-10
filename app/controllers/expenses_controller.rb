@@ -20,7 +20,7 @@ class ExpensesController < ApplicationController
         .where(date: Date.today.beginning_of_month..Date.today.end_of_month)
         .order(date: :desc)
 
-      render :index, status: :unprocessable_entity
+      redirect_to expenses_path, alert: @expense.errors.full_messages.to_sentence
     end
   end
 

@@ -1,83 +1,20 @@
 <!-- app/views/expenses/index.html.erb -->
 
-<div class="max-w-5xl mx-auto space-y-10 px-4 py-12">
+<!-- Header -->
+<%= render "shared/title", title: "Expenses" %>
 
-  <!-- Header -->
-  <div class="flex justify-between items-center">
-    <h1 class="text-3xl font-semibold text-gray-900">Expenses</h1>
+<!-- Quick Add Form -->
+<%= render "quick_add_form", expense: @expense %>
+
+<div class="rounded-lg bg-white shadow-sm">
+  <div class="border-b border-gray-300 px-6 py-4 font-medium">
+    All Expenses
   </div>
 
-  <!-- Quick Add Form -->
-  <div class="rounded-lg bg-white p-6 shadow-sm">
-    <%= form_with model: @expense, local: true, class: "flex flex-wrap gap-4 items-end" do |f| %>
-
-      <% if @expense.errors.any? %>
-        <div class="w-full bg-red-100 text-red-800 p-3 rounded mb-4">
-          <strong class="block mb-1">Please fix the following errors:</strong>
-          <ul class="list-disc pl-5">
-            <% @expense.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-
-      <!-- Amount -->
-      <div class="flex-1 min-w-[120px]">
-        <%= f.label :amount, class: "block text-xs text-gray-500" %>
-        <%= f.number_field :amount,
-              step: 0.01,
-              autofocus: true,
-              class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black" %>
-      </div>
-
-      <!-- Category -->
-      <div class="flex-1 min-w-[150px]">
-        <%= f.label :category_id, "Category", class: "block text-xs text-gray-500" %>
-        <%= f.collection_select :category_id,
-              Category.all,
-              :id,
-              :name,
-              { prompt: "-- select category --" },
-              class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
-
-        <%= link_to "+ New Category", categories_path,
-              class: "text-sm text-blue-600 hover:underline mt-1 inline-block" %>
-      </div>
-
-      <!-- Date -->
-      <div class="flex-1 min-w-[140px]">
-        <%= f.label :date, class: "block text-xs text-gray-500" %>
-        <%= f.date_field :date,
-              class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
-      </div>
-
-      <!-- Note -->
-      <div class="flex-1 min-w-[160px]">
-        <%= f.label :note, class: "block text-xs text-gray-500" %>
-        <%= f.text_field :note,
-              placeholder: "Note",
-              class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm" %>
-      </div>
-
-      <!-- Submit -->
-      <div>
-        <%= f.submit "Add",
-              class: "w-full rounded-md bg-black px-4 py-2 text-white hover:bg-gray-800" %>
-      </div>
-
-    <% end %>
-  </div>
-
-  <!-- Expenses List -->
-  <div class="rounded-lg bg-white shadow-sm">
-    <div class="border-b px-6 py-4 font-medium">
-      All Expenses
-    </div>
-
+  <% if @expenses.any? %>
     <ul class="divide-y">
       <% @expenses.each do |e| %>
-        <li class="flex justify-between px-6 py-3 items-center">
+        <li class="flex items-center justify-between px-6 py-3 border-b border-gray-100">
           <div>
             <div class="font-medium"><%= e.category.name %></div>
             <div class="text-sm text-gray-500">
@@ -92,6 +29,9 @@
         </li>
       <% end %>
     </ul>
-  </div>
-
+  <% else %>
+    <div class="px-6 py-8 text-center text-sm text-gray-500">
+      No expenses yet.
+    </div>
+  <% end %>
 </div>

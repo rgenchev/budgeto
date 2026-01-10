@@ -1,38 +1,33 @@
-<!-- app/views/categories/index.html.erb -->
-
-<div class="max-w-5xl mx-auto space-y-10 px-4 py-12">
-
-  <!-- Header -->
-  <div class="flex justify-between items-center">
-    <h1 class="text-3xl font-semibold text-gray-900">Categories</h1>
-
-    <%= link_to "New Category",
-          new_category_path,
-          class: "rounded-md bg-black px-4 py-2 text-white hover:bg-gray-800" %>
-  </div>
-
-  <!-- Categories List -->
-  <div class="rounded-lg bg-white shadow-sm">
-    <div class="border-b px-6 py-4 font-medium">
-      All Categories
+<div>
+  <div class="flex justify-between items-center mb-5">
+    <div class="flex justify-between items-center">
+      <%= render "shared/title", title: "Categories" %>
     </div>
 
+    <%= link_to "New category", new_category_path, class: link_primary_classes %>
+  </div>
+
+  <div class="rounded-lg bg-white shadow-sm">
     <ul class="divide-y">
       <% @categories.each do |c| %>
-        <li class="flex justify-between px-6 py-4 items-center">
+        <li class="flex justify-between px-6 py-4 items-center border-b border-gray-100">
           <span class="font-medium text-gray-800"><%= c.name %></span>
 
-          <div class="flex gap-4">
-            <%= link_to "Edit", edit_category_path(c),
-                  class: "text-sm text-blue-600 hover:underline" %>
-            <%= link_to "Delete", category_path(c),
-                  method: :delete,
-                  data: { confirm: "Are you sure?" },
-                  class: "text-sm text-red-600 hover:underline" %>
+          <div class="flex items-center gap-4 text-sm">
+            <%= link_to "Edit",
+              edit_category_path(c),
+              class: "text-gray-600 hover:text-gray-900 underline-offset-4 hover:underline"
+            %>
+
+            <%= link_to "Delete",
+              category_path(c),
+              method: :delete,
+              data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to remove this student from the course?" },
+              class: "text-red-600 hover:text-red-700 underline-offset-4 hover:underline"
+            %>
           </div>
         </li>
       <% end %>
     </ul>
   </div>
-
 </div>

@@ -1,3 +1,7 @@
-<!-- new.html.erb -->
-<h1 class="text-xl font-semibold mb-4">New Category</h1>
-<%= render "form", category: @category %>
+<div>
+  <div class="mx-auto max-w-md w-full mb-5">
+    <%= render "shared/title", title: "New category" %>
+
+    <%= render "form", category: @category %>
+  </div>
+</div>

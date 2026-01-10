@@ -1,3 +1,7 @@
-<!-- edit.html.erb -->
-<h1 class="text-xl font-semibold mb-4">Edit Category</h1>
-<%= render "form", category: @category %>
+<div>
+  <div class="mx-auto max-w-md w-full mb-5">
+    <%= render "shared/title", title: "Edit category" %>
+
+    <%= render "form", category: @category %>
+  </div>
+</div>

@@ -15,7 +15,7 @@ class CategoriesController < ApplicationController
     if @category.save
       redirect_to categories_path, notice: "Category created"
     else
-      render :new, status: :unprocessable_entity
+      redirect_to new_category_path, alert: @category.errors.full_messages.to_sentence
     end
   end
 
@@ -25,12 +25,13 @@ class CategoriesController < ApplicationController
     if @category.update(category_params)
       redirect_to categories_path, notice: "Category updated"
     else
-      render :edit, status: :unprocessable_entity
+      redirect_to edit_category_path(@category), alert: @category.errors.full_messages.to_sentence
     end
   end
 
   def destroy
     @category.destroy
+
     redirect_to categories_path, notice: "Category deleted"
   end
 
