@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_10_083311) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_01_115220) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,7 +27,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_10_083311) do
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["amount", "category_id", "date", "note"], name: "index_expenses_on_unique_entry", unique: true
     t.index ["category_id"], name: "index_expenses_on_category_id"
+  end
+
+  create_table "incomes", force: :cascade do |t|
+    t.decimal "amount", null: false
+    t.date "date", null: false
+    t.string "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "sessions", force: :cascade do |t|

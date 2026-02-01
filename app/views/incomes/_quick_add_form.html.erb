@@ -1,11 +1,11 @@
 <div class="rounded-lg bg-white p-6 shadow-sm">
-  <%= form_with model: expense, local: true, class: "flex flex-wrap gap-4 items-end", data: { controller: "reset-form" } do |f| %>
+  <%= form_with model: income, local: true, class: "flex flex-wrap gap-4 items-end", data: { controller: "reset-form" } do |f| %>
 
-    <% if expense.errors.any? %>
+    <% if income.errors.any? %>
       <div class="w-full bg-red-100 text-red-800 p-3 rounded mb-4">
         <strong class="block mb-1">Please fix the following errors:</strong>
         <ul class="list-disc pl-5">
-          <% expense.errors.full_messages.each do |msg| %>
+          <% income.errors.full_messages.each do |msg| %>
             <li><%= msg %></li>
           <% end %>
         </ul>
@@ -21,17 +21,6 @@
             class: input_classes %>
     </div>
 
-    <!-- Category -->
-    <div class="flex-1 min-w-[150px]">
-      <%= f.label :category_id, "Category", class: label_classes %>
-      <%= f.collection_select :category_id,
-            Category.all,
-            :id,
-            :name,
-            { prompt: "Select category" },
-            class: input_classes %>
-    </div>
-
     <!-- Date -->
     <div class="flex-1 min-w-[140px]">
       <%= f.label :date, class: label_classes %>
@@ -43,7 +32,7 @@
     <div class="flex-1 min-w-[160px]">
       <%= f.label :note, class: label_classes %>
       <%= f.text_field :note,
-            placeholder: "Note",
+            placeholder: "e.g. January salary",
             class: input_classes %>
     </div>
 

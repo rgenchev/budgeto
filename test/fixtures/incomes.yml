@@ -1,0 +1,9 @@
+one:
+  amount: 3000.00
+  date: <%= Date.today.beginning_of_month.to_s %>
+  note: Monthly salary
+
+two:
+  amount: 500.00
+  date: <%= Date.today.beginning_of_month.to_s %>
+  note: Freelance project

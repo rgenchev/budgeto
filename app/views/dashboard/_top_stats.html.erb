@@ -1,15 +1,22 @@
 <div class="flex justify-center space-x-6 mb-5">
   <div class="rounded-lg bg-white p-6 shadow-sm">
-    <div class="text-sm text-gray-500">Total this month</div>
+    <div class="text-sm text-gray-500">Income</div>
+    <div class="mt-2 text-2xl font-semibold text-green-600">
+      <%= number_to_eur(total_income) %>
+    </div>
+  </div>
+
+  <div class="rounded-lg bg-white p-6 shadow-sm">
+    <div class="text-sm text-gray-500">Expenses</div>
     <div class="mt-2 text-2xl font-semibold">
       <%= number_to_eur(total_this_month) %>
     </div>
   </div>
 
   <div class="rounded-lg bg-white p-6 shadow-sm">
-    <div class="text-sm text-gray-500">Days tracked</div>
-    <div class="mt-2 text-2xl font-semibold">
-      <%= daily.size %>
+    <div class="text-sm text-gray-500">Balance</div>
+    <div class="mt-2 text-2xl font-semibold <%= balance >= 0 ? 'text-green-600' : 'text-red-600' %>">
+      <%= number_to_eur(balance) %>
     </div>
   </div>
 </div>

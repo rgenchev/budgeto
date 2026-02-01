@@ -1,0 +1,12 @@
+<div class="flex justify-center items-center gap-4 mb-6">
+  <% prev_month = current_date.prev_month %>
+  <% next_month = current_date.next_month %>
+
+  <%= link_to "← #{prev_month.strftime('%b %Y')}", url_for(month: prev_month.month, year: prev_month.year, category: params[:category]),
+        class: "text-gray-600 hover:text-black font-medium" %>
+
+  <span class="font-semibold text-gray-900"><%= current_date.strftime("%B %Y") %></span>
+
+  <%= link_to "#{next_month.strftime('%b %Y')} →", url_for(month: next_month.month, year: next_month.year, category: params[:category]),
+        class: "text-gray-600 hover:text-black font-medium" %>
+</div>

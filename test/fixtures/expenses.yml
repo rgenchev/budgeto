@@ -2,12 +2,12 @@
 
 one:
   amount: 9.99
-  date: 2025-12-27
-  note: MyString
+  date: <%= Date.today.beginning_of_month.to_s %>
+  note: Groceries
   category: one
 
 two:
   amount: 9.99
-  date: 2025-12-27
-  note: MyString
+  date: <%= Date.today.beginning_of_month.to_s %>
+  note: Bus ticket
   category: two

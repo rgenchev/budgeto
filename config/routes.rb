@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get 'dashboard', to: 'dashboard#index', as: :dashboard
 
   resources :expenses, only: [:index, :create]
+  resources :incomes, only: [:index, :create]
   resources :categories
 
   root "dashboard#index"

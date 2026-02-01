@@ -3,12 +3,27 @@
 <!-- Header -->
 <%= render "shared/title", title: "Expenses" %>
 
+<!-- Month navigation -->
+<%= render "shared/month_nav", current_date: @current_date %>
+
+<!-- Category Filter -->
+<div class="flex gap-2 mb-6 overflow-x-auto">
+  <%= link_to "All",
+        expenses_path(month: @current_date.month, year: @current_date.year),
+        class: @current_category.nil? ? "shrink-0 px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap bg-black text-white" : "shrink-0 px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap border border-gray-300 text-gray-600 hover:text-black" %>
+  <% @categories.each do |cat| %>
+    <%= link_to cat.name,
+          expenses_path(month: @current_date.month, year: @current_date.year, category: cat.id),
+          class: @current_category == cat ? "shrink-0 px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap bg-black text-white" : "shrink-0 px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap border border-gray-300 text-gray-600 hover:text-black" %>
+  <% end %>
+</div>
+
 <!-- Quick Add Form -->
 <%= render "quick_add_form", expense: @expense %>
 
 <div class="rounded-lg bg-white shadow-sm">
   <div class="border-b border-gray-300 px-6 py-4 font-medium">
-    All Expenses
+    <%= @current_category ? "#{@current_category.name} Expenses" : "All Expenses" %>
   </div>
 
   <% if @expenses.any? %>

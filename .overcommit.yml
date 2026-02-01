@@ -1,0 +1,14 @@
+PreCommit:
+  ALL:
+    enabled: false
+
+CommitMsg:
+  ALL:
+    enabled: false
+
+PrePush:
+  ALL:
+    enabled: false
+  RailsTest:
+    enabled: true
+    command: ['bin/rails', 'test']

@@ -13,6 +13,8 @@ class DashboardController < ApplicationController
     range = @current_date.beginning_of_month..@current_date.end_of_month
 
     @total_this_month = Expense.where(date: range).sum(:amount)
+    @total_income = Income.where(date: range).sum(:amount)
+    @balance = @total_income - @total_this_month
 
     @by_category = Expense
       .joins(:category)
