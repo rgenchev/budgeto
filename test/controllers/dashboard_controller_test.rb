@@ -57,4 +57,51 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     get root_url
     assert_redirected_to new_session_path
   end
+
+  test "displays budget progress bar for category with budget" do
+    category = categories(:one)
+    category.update!(monthly_budget: 100)
+
+    get root_url
+    assert_response :success
+    assert_select ".bg-gray-200.rounded-full", minimum: 1
+  end
+
+  test "displays green progress bar when under 80% of budget" do
+    category = categories(:one)
+    category.update!(monthly_budget: 100)
+    # Existing fixture expense is 9.99 which is under 80%
+
+    get root_url
+    assert_response :success
+    assert_select ".bg-green-500", minimum: 1
+  end
+
+  test "displays orange progress bar when between 80-100% of budget" do
+    category = categories(:one)
+    category.update!(monthly_budget: 12) # 9.99/12 = 83%
+
+    get root_url
+    assert_response :success
+    assert_select ".bg-orange-500", minimum: 1
+  end
+
+  test "displays red progress bar when over budget" do
+    category = categories(:one)
+    category.update!(monthly_budget: 5) # 9.99/5 = 200%
+
+    get root_url
+    assert_response :success
+    assert_select ".bg-red-500", minimum: 1
+  end
+
+  test "does not display progress bar for category without budget" do
+    category = categories(:one)
+    category.update!(monthly_budget: nil)
+
+    get root_url
+    assert_response :success
+    # Should have category name but no progress bar for that category
+    assert_select "li", text: /Food/
+  end
 end

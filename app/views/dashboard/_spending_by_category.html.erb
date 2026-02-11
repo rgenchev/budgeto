@@ -5,10 +5,34 @@
 
   <% if by_category.present? %>
   <ul class="divide-y">
-    <% by_category.each do |name, sum| %>
-      <li class="flex justify-between px-6 py-3 border-b border-gray-100">
-        <span><%= name %></span>
-        <span class="font-medium"><%= number_to_eur(sum) %></span>
+    <% by_category.each do |category| %>
+      <li class="px-6 py-3 border-b border-gray-100">
+        <div class="flex justify-between mb-1">
+          <span><%= category[:name] %></span>
+          <span class="font-medium">
+            <% if category[:budget] %>
+              <%= number_to_eur(category[:spent]) %> / <%= number_to_eur(category[:budget]) %>
+            <% else %>
+              <%= number_to_eur(category[:spent]) %>
+            <% end %>
+          </span>
+        </div>
+        <% if category[:budget] %>
+          <%
+            percentage = (category[:spent] / category[:budget] * 100).to_i
+            bar_width = [percentage, 100].min
+            bar_color = if percentage > 100
+              "bg-red-500"
+            elsif percentage >= 80
+              "bg-orange-500"
+            else
+              "bg-green-500"
+            end
+          %>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="<%= bar_color %> h-2 rounded-full" style="width: <%= bar_width %>%"></div>
+          </div>
+        <% end %>
       </li>
     <% end %>
   </ul>

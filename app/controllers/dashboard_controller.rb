@@ -19,9 +19,10 @@ class DashboardController < ApplicationController
     @by_category = Expense
       .joins(:category)
       .where(date: range)
-      .group("categories.name")
+      .group("categories.id", "categories.name", "categories.monthly_budget")
       .sum(:amount)
-      .sort_by { |_k, v| -v }
+      .map { |(id, name, budget), spent| { name: name, spent: spent, budget: budget } }
+      .sort_by { |c| -c[:spent] }
 
     @daily = Expense
       .where(date: range)
