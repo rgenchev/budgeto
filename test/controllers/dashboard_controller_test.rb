@@ -28,11 +28,18 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_select "div", /Balance/
   end
 
-  test "balance equals income minus expenses" do
+  test "displays taxes card" do
+    get root_url
+    assert_response :success
+    assert_select "div", /Taxes/
+  end
+
+  test "balance equals income minus taxes minus expenses" do
     range = Date.today.beginning_of_month..Date.today.end_of_month
     total_income = Income.where(date: range).sum(:amount)
+    total_taxes = Tax.where(date: range).sum(:amount)
     total_expenses = Expense.where(date: range).sum(:amount)
-    expected_balance = total_income - total_expenses
+    expected_balance = total_income - total_taxes - total_expenses
 
     get root_url
     assert_response :success

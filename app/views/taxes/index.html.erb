@@ -1,0 +1,37 @@
+<!-- Header -->
+<%= render "shared/title", title: "Taxes" %>
+
+<!-- Month navigation -->
+<%= render "shared/month_nav", current_date: @current_date %>
+
+<!-- Quick Add Form -->
+<%= render "quick_add_form", tax: @tax %>
+
+<div class="rounded-lg bg-white shadow-sm">
+  <div class="border-b border-gray-300 px-6 py-4 font-medium">
+    All Taxes
+  </div>
+
+  <% if @taxes.any? %>
+    <ul class="divide-y">
+      <% @taxes.each do |t| %>
+        <li class="flex items-center justify-between px-6 py-3 border-b border-gray-100">
+          <div>
+            <div class="text-sm text-gray-500">
+              <%= t.date.strftime("%b %d, %Y") %>
+              <%= t.note.present? ? "— #{t.note}" : "" %>
+            </div>
+          </div>
+
+          <div class="font-semibold text-orange-600">
+            <%= number_to_eur(t.amount) %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="px-6 py-8 text-center text-sm text-gray-500">
+      No taxes yet.
+    </div>
+  <% end %>
+</div>

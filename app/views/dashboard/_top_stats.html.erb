@@ -7,9 +7,16 @@
   </div>
 
   <div class="rounded-lg bg-white p-6 shadow-sm">
+    <div class="text-sm text-gray-500">Taxes</div>
+    <div class="mt-2 text-2xl font-semibold text-orange-600">
+      <%= number_to_eur(total_taxes) %>
+    </div>
+  </div>
+
+  <div class="rounded-lg bg-white p-6 shadow-sm">
     <div class="text-sm text-gray-500">Expenses</div>
     <div class="mt-2 text-2xl font-semibold">
-      <%= number_to_eur(total_this_month) %>
+      <%= number_to_eur(total_expenses) %>
     </div>
   </div>
 

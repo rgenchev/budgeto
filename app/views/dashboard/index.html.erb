@@ -4,6 +4,6 @@
   <%= render "shared/month_nav", current_date: @current_date %>
 
 
-  <%= render "top_stats", total_this_month: @total_this_month, total_income: @total_income, balance: @balance %>
+  <%= render "top_stats", total_expenses: @total_expenses, total_income: @total_income, total_taxes: @total_taxes, balance: @balance %>
   <%= render "spending_by_category", by_category: @by_category %>
 </div>

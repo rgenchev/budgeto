@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   resources :expenses, only: [:index, :create]
   resources :incomes, only: [:index, :create]
+  resources :taxes, only: [:index, :create]
   resources :categories
 
   root "dashboard#index"

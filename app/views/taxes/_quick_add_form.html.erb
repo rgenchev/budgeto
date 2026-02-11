@@ -1,0 +1,45 @@
+<div class="rounded-lg bg-white p-6 shadow-sm">
+  <%= form_with model: tax, local: true, class: "flex flex-wrap gap-4 items-end", data: { controller: "reset-form" } do |f| %>
+
+    <% if tax.errors.any? %>
+      <div class="w-full bg-red-100 text-red-800 p-3 rounded mb-4">
+        <strong class="block mb-1">Please fix the following errors:</strong>
+        <ul class="list-disc pl-5">
+          <% tax.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <!-- Amount -->
+    <div class="flex-1 min-w-[120px]">
+      <%= f.label :amount, class: label_classes %>
+      <%= f.number_field :amount,
+            step: 0.01,
+            autofocus: true,
+            class: input_classes %>
+    </div>
+
+    <!-- Date -->
+    <div class="flex-1 min-w-[140px]">
+      <%= f.label :date, class: label_classes %>
+      <%= f.date_field :date,
+            class: input_classes %>
+    </div>
+
+    <!-- Note -->
+    <div class="flex-1 min-w-[160px]">
+      <%= f.label :note, class: label_classes %>
+      <%= f.text_field :note,
+            placeholder: "e.g. Income tax Q1",
+            class: input_classes %>
+    </div>
+
+    <!-- Submit -->
+    <div>
+      <%= f.submit "Add", class: link_primary_classes %>
+    </div>
+
+  <% end %>
+</div>
