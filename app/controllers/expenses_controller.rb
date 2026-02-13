@@ -1,5 +1,7 @@
 # app/controllers/expenses_controller.rb
 class ExpensesController < ApplicationController
+  before_action :set_expense, only: [:edit, :update, :destroy]
+
   def index
     if params[:month] && params[:year]
       @current_date = Date.new(params[:year].to_i, params[:month].to_i, 1)
@@ -33,7 +35,29 @@ class ExpensesController < ApplicationController
     end
   end
 
+  def edit
+    @categories = Category.order(:name)
+  end
+
+  def update
+    if @expense.update(expense_params)
+      redirect_to expenses_path, notice: "Expense updated"
+    else
+      @categories = Category.order(:name)
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @expense.destroy
+    redirect_to expenses_path, notice: "Expense deleted"
+  end
+
   private
+
+  def set_expense
+    @expense = Expense.find(params[:id])
+  end
 
   def expense_params
     params.require(:expense).permit(:amount, :date, :note, :category_id)

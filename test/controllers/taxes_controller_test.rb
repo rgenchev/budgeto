@@ -24,6 +24,26 @@ class TaxesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to taxes_path
   end
 
+  test "should get edit" do
+    get edit_tax_url(taxes(:one))
+    assert_response :success
+  end
+
+  test "should update tax" do
+    tax = taxes(:one)
+    patch tax_url(tax), params: { tax: { amount: 200 } }
+    assert_redirected_to taxes_path
+    tax.reload
+    assert_equal 200, tax.amount.to_f
+  end
+
+  test "should destroy tax" do
+    assert_difference("Tax.count", -1) do
+      delete tax_url(taxes(:one))
+    end
+    assert_redirected_to taxes_path
+  end
+
   test "redirects to login when not authenticated" do
     cookies[:session_id] = nil
     get taxes_url

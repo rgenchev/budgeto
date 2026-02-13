@@ -15,7 +15,7 @@
   <% if @taxes.any? %>
     <ul class="divide-y">
       <% @taxes.each do |t| %>
-        <li class="flex items-center justify-between px-6 py-3 border-b border-gray-100">
+        <li class="flex items-center justify-between px-6 py-3 border-b border-gray-100 group">
           <div>
             <div class="text-sm text-gray-500">
               <%= t.date.strftime("%b %d, %Y") %>
@@ -23,8 +23,12 @@
             </div>
           </div>
 
-          <div class="font-semibold text-orange-600">
-            <%= number_to_eur(t.amount) %>
+          <div class="flex items-center gap-4">
+            <span class="font-semibold text-orange-600"><%= number_to_eur(t.amount) %></span>
+            <div class="flex gap-2 items-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <%= link_to "Edit", edit_tax_path(t), class: "text-sm text-gray-500 hover:text-black" %>
+              <%= link_to "Delete", tax_path(t), data: { turbo_method: :delete, turbo_confirm: "Delete this tax?" }, class: "text-sm text-gray-500 hover:text-red-600" %>
+            </div>
           </div>
         </li>
       <% end %>

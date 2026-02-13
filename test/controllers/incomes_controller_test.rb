@@ -67,6 +67,26 @@ class IncomesControllerTest < ActionDispatch::IntegrationTest
     assert_select "div", text: "No income yet."
   end
 
+  test "should get edit" do
+    get edit_income_url(incomes(:one))
+    assert_response :success
+  end
+
+  test "should update income" do
+    income = incomes(:one)
+    patch income_url(income), params: { income: { amount: 5000 } }
+    assert_redirected_to incomes_path
+    income.reload
+    assert_equal 5000, income.amount.to_f
+  end
+
+  test "should destroy income" do
+    assert_difference("Income.count", -1) do
+      delete income_url(incomes(:one))
+    end
+    assert_redirected_to incomes_path
+  end
+
   test "redirects to login when not authenticated" do
     cookies[:session_id] = nil
     get incomes_url

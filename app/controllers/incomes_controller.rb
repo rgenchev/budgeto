@@ -1,4 +1,6 @@
 class IncomesController < ApplicationController
+  before_action :set_income, only: [:edit, :update, :destroy]
+
   def index
     if params[:month] && params[:year]
       @current_date = Date.new(params[:year].to_i, params[:month].to_i, 1)
@@ -25,7 +27,26 @@ class IncomesController < ApplicationController
     end
   end
 
+  def edit; end
+
+  def update
+    if @income.update(income_params)
+      redirect_to incomes_path, notice: "Income updated"
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @income.destroy
+    redirect_to incomes_path, notice: "Income deleted"
+  end
+
   private
+
+  def set_income
+    @income = Income.find(params[:id])
+  end
 
   def income_params
     params.require(:income).permit(:amount, :date, :note)

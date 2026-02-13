@@ -29,7 +29,7 @@
   <% if @expenses.any? %>
     <ul class="divide-y">
       <% @expenses.each do |e| %>
-        <li class="flex items-center justify-between px-6 py-3 border-b border-gray-100">
+        <li class="flex items-center justify-between px-6 py-3 border-b border-gray-100 group">
           <div>
             <div class="font-medium"><%= e.category.name %></div>
             <div class="text-sm text-gray-500">
@@ -38,8 +38,12 @@
             </div>
           </div>
 
-          <div class="font-semibold">
-            <%= number_to_eur(e.amount) %>
+          <div class="flex items-center gap-4">
+            <span class="font-semibold"><%= number_to_eur(e.amount) %></span>
+            <div class="flex gap-2 items-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <%= link_to "Edit", edit_expense_path(e), class: "text-sm text-gray-500 hover:text-black" %>
+              <%= link_to "Delete", expense_path(e), data: { turbo_method: :delete, turbo_confirm: "Delete this expense?" }, class: "text-sm text-gray-500 hover:text-red-600" %>
+            </div>
           </div>
         </li>
       <% end %>

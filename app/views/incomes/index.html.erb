@@ -15,7 +15,7 @@
   <% if @incomes.any? %>
     <ul class="divide-y">
       <% @incomes.each do |i| %>
-        <li class="flex items-center justify-between px-6 py-3 border-b border-gray-100">
+        <li class="flex items-center justify-between px-6 py-3 border-b border-gray-100 group">
           <div>
             <div class="text-sm text-gray-500">
               <%= i.date.strftime("%b %d, %Y") %>
@@ -23,8 +23,12 @@
             </div>
           </div>
 
-          <div class="font-semibold">
-            <%= number_to_eur(i.amount) %>
+          <div class="flex items-center gap-4">
+            <span class="font-semibold"><%= number_to_eur(i.amount) %></span>
+            <div class="flex gap-2 items-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <%= link_to "Edit", edit_income_path(i), class: "text-sm text-gray-500 hover:text-black" %>
+              <%= link_to "Delete", income_path(i), data: { turbo_method: :delete, turbo_confirm: "Delete this income?" }, class: "text-sm text-gray-500 hover:text-red-600" %>
+            </div>
           </div>
         </li>
       <% end %>

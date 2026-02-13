@@ -69,6 +69,26 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href*='category=#{food.id}']", minimum: 2
   end
 
+  test "should get edit" do
+    get edit_expense_url(expenses(:one))
+    assert_response :success
+  end
+
+  test "should update expense" do
+    expense = expenses(:one)
+    patch expense_url(expense), params: { expense: { amount: 99.99 } }
+    assert_redirected_to expenses_path
+    expense.reload
+    assert_equal 99.99, expense.amount.to_f
+  end
+
+  test "should destroy expense" do
+    assert_difference("Expense.count", -1) do
+      delete expense_url(expenses(:one))
+    end
+    assert_redirected_to expenses_path
+  end
+
   test "redirects to login when not authenticated" do
     cookies[:session_id] = nil
     get expenses_url
