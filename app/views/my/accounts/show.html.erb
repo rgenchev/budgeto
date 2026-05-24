@@ -1,0 +1,14 @@
+<div class="mx-auto max-w-sm w-full">
+  <h1 class="text-3xl font-semibold text-gray-900 mb-3 text-center"><%= "Account" %></h1>
+
+  <div class="rounded-lg bg-white shadow-sm p-6">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;">
+      <span style="<%= user_badge_style(@user, size: 56, font_size: 20) %>"><%= @user.initials %></span>
+      <p class="font-semibold text-gray-900 mt-2"><%= @user.display_name %></p>
+      <p class="text-sm text-gray-400"><%= @user.email_address %></p>
+      <div style="height:8px;"></div>
+      <%= link_to "Edit account", edit_my_account_path, class: "rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 transition-colors" %>
+      <%= button_to "Sign out", session_path, method: :delete, class: "rounded-md border border-gray-200 px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-900 hover:border-gray-300 transition-colors cursor-pointer" %>
+    </div>
+  </div>
+</div>

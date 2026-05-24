@@ -1,8 +1,8 @@
 <div>
   <%= render "shared/title", title: "Dashboard" %>
+  <%= render "monthly_chart", monthly_expenses: @monthly_expenses %>
 
   <%= render "shared/month_nav", current_date: @current_date %>
-
 
   <%= render "top_stats", total_expenses: @total_expenses, total_income: @total_income, total_taxes: @total_taxes, balance: @balance %>
   <%= render "spending_by_category", by_category: @by_category %>

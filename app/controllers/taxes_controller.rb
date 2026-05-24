@@ -12,13 +12,14 @@ class TaxesController < ApplicationController
 
     @tax = Tax.new(date: Date.today)
 
-    @taxes = Tax
+    @taxes = Current.household.taxes
       .where(date: range)
       .order(date: :desc, created_at: :desc)
   end
 
   def create
-    @tax = Tax.new(tax_params)
+    @tax = Current.household.taxes.build(tax_params)
+    @tax.user = Current.user
 
     if @tax.save
       redirect_to taxes_path
@@ -45,7 +46,7 @@ class TaxesController < ApplicationController
   private
 
   def set_tax
-    @tax = Tax.find(params[:id])
+    @tax = Current.household.taxes.find(params[:id])
   end
 
   def tax_params

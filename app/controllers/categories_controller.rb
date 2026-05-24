@@ -1,9 +1,8 @@
-# app/controllers/categories_controller.rb
 class CategoriesController < ApplicationController
   before_action :set_category, only: [:edit, :update, :destroy]
 
   def index
-    @categories = Category.order(:name)
+    @categories = Current.household.categories.order(:name)
   end
 
   def new
@@ -11,7 +10,7 @@ class CategoriesController < ApplicationController
   end
 
   def create
-    @category = Category.new(category_params)
+    @category = Current.household.categories.build(category_params)
     if @category.save
       redirect_to categories_path, notice: "Category created"
     else
@@ -31,14 +30,13 @@ class CategoriesController < ApplicationController
 
   def destroy
     @category.destroy
-
     redirect_to categories_path, notice: "Category deleted"
   end
 
   private
 
   def set_category
-    @category = Category.find(params[:id])
+    @category = Current.household.categories.find(params[:id])
   end
 
   def category_params

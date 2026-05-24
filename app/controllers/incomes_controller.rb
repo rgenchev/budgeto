@@ -12,13 +12,14 @@ class IncomesController < ApplicationController
 
     @income = Income.new(date: Date.today)
 
-    @incomes = Income
+    @incomes = Current.household.incomes
       .where(date: range)
       .order(date: :desc, created_at: :desc)
   end
 
   def create
-    @income = Income.new(income_params)
+    @income = Current.household.incomes.build(income_params)
+    @income.user = Current.user
 
     if @income.save
       redirect_to incomes_path
@@ -45,7 +46,7 @@ class IncomesController < ApplicationController
   private
 
   def set_income
-    @income = Income.find(params[:id])
+    @income = Current.household.incomes.find(params[:id])
   end
 
   def income_params

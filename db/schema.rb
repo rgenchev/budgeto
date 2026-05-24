@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_11_145748) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_24_185042) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,6 +19,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_11_145748) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "monthly_budget", precision: 10, scale: 2
+    t.bigint "household_id", null: false
+    t.index ["household_id"], name: "index_categories_on_household_id"
   end
 
   create_table "expenses", force: :cascade do |t|
@@ -28,8 +30,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_11_145748) do
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.bigint "household_id", null: false
     t.index ["amount", "category_id", "date", "note"], name: "index_expenses_on_unique_entry", unique: true
     t.index ["category_id"], name: "index_expenses_on_category_id"
+    t.index ["household_id"], name: "index_expenses_on_household_id"
+    t.index ["user_id"], name: "index_expenses_on_user_id"
+  end
+
+  create_table "households", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "incomes", force: :cascade do |t|
@@ -38,6 +50,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_11_145748) do
     t.string "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "household_id", null: false
+    t.bigint "user_id"
+    t.index ["household_id"], name: "index_incomes_on_household_id"
+    t.index ["user_id"], name: "index_incomes_on_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -55,6 +71,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_11_145748) do
     t.string "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "household_id", null: false
+    t.bigint "user_id"
+    t.index ["household_id"], name: "index_taxes_on_household_id"
+    t.index ["user_id"], name: "index_taxes_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -62,9 +82,21 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_11_145748) do
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.bigint "household_id", null: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
+    t.index ["household_id"], name: "index_users_on_household_id"
   end
 
+  add_foreign_key "categories", "households"
   add_foreign_key "expenses", "categories"
+  add_foreign_key "expenses", "households"
+  add_foreign_key "expenses", "users"
+  add_foreign_key "incomes", "households"
+  add_foreign_key "incomes", "users"
   add_foreign_key "sessions", "users"
+  add_foreign_key "taxes", "households"
+  add_foreign_key "taxes", "users"
+  add_foreign_key "users", "households"
 end

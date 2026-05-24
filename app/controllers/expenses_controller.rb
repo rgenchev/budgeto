@@ -1,4 +1,3 @@
-# app/controllers/expenses_controller.rb
 class ExpensesController < ApplicationController
   before_action :set_expense, only: [:edit, :update, :destroy]
 
@@ -11,39 +10,46 @@ class ExpensesController < ApplicationController
 
     range = @current_date.beginning_of_month..@current_date.end_of_month
 
-    @expense = Expense.new(date: Date.today)
-    @categories = Category.order(:name)
+    default_date = if @current_date.month == Date.today.month && @current_date.year == Date.today.year
+      Date.today
+    else
+      Current.household.expenses.where(date: range).maximum(:date) || @current_date.beginning_of_month
+    end
 
-    @expenses = Expense
-      .includes(:category)
+    @expense = Expense.new(date: default_date)
+    @categories = Current.household.categories.order(:name)
+
+    @expenses = Current.household.expenses
+      .includes(:category, :user)
       .where(date: range)
       .order(date: :desc, created_at: :desc)
 
     if params[:category].present?
-      @current_category = Category.find_by(id: params[:category])
+      @current_category = @categories.find_by(id: params[:category])
       @expenses = @expenses.where(category_id: @current_category.id) if @current_category
     end
   end
 
   def create
-    @expense = Expense.new(expense_params)
+    @expense = Current.household.expenses.build(expense_params)
+    @expense.user = Current.user
 
     if @expense.save
-      redirect_to expenses_path
+      redirect_to expenses_path(month: params[:month], year: params[:year])
     else
-      redirect_to expenses_path, alert: @expense.errors.full_messages.to_sentence
+      redirect_to expenses_path(month: params[:month], year: params[:year]), alert: @expense.errors.full_messages.to_sentence
     end
   end
 
   def edit
-    @categories = Category.order(:name)
+    @categories = Current.household.categories.order(:name)
   end
 
   def update
     if @expense.update(expense_params)
       redirect_to expenses_path, notice: "Expense updated"
     else
-      @categories = Category.order(:name)
+      @categories = Current.household.categories.order(:name)
       render :edit, status: :unprocessable_entity
     end
   end
@@ -56,7 +62,7 @@ class ExpensesController < ApplicationController
   private
 
   def set_expense
-    @expense = Expense.find(params[:id])
+    @expense = Current.household.expenses.find(params[:id])
   end
 
   def expense_params

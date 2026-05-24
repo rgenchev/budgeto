@@ -19,7 +19,7 @@
 </div>
 
 <!-- Quick Add Form -->
-<%= render "quick_add_form", expense: @expense %>
+<%= render "quick_add_form", expense: @expense, current_date: @current_date %>
 
 <div class="rounded-lg bg-white shadow-sm">
   <div class="border-b border-gray-300 px-6 py-4 font-medium">
@@ -30,11 +30,16 @@
     <ul class="divide-y">
       <% @expenses.each do |e| %>
         <li class="flex items-center justify-between px-6 py-3 border-b border-gray-100 group">
-          <div>
-            <div class="font-medium"><%= e.category.name %></div>
-            <div class="text-sm text-gray-500">
-              <%= e.date.strftime("%b %d, %Y") %>
-              <%= e.note.present? ? "— #{e.note}" : "" %>
+          <div class="flex items-center gap-4">
+            <% if e.user %>
+              <span style="<%= user_badge_style(e.user) %>" title="<%= e.user.display_name %>"><%= e.user.initials %></span>
+            <% end %>
+            <div>
+              <div class="font-medium"><%= e.category.name %></div>
+              <div class="text-sm text-gray-500">
+                <%= e.date.strftime("%b %d, %Y") %>
+                <%= e.note.present? ? "— #{e.note}" : "" %>
+              </div>
             </div>
           </div>
 

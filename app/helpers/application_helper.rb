@@ -1,4 +1,16 @@
 module ApplicationHelper
+  BADGE_COLORS = %w[#3b82f6 #10b981 #8b5cf6 #f43f5e #f59e0b #06b6d4 #ec4899 #14b8a6].freeze
+
+  def user_badge_color(user)
+    BADGE_COLORS[user.id % BADGE_COLORS.length]
+  end
+
+  def user_badge_style(user, size: 28, font_size: 11)
+    color = user_badge_color(user)
+    "width:#{size}px;height:#{size}px;border-radius:50%;background-color:#{color};display:inline-flex;align-items:center;justify-content:center;font-size:#{font_size}px;font-weight:700;color:white;flex-shrink:0;line-height:1;"
+  end
+
+
   def number_to_eur(number)
     number_to_currency(number, unit: "€", delimiter: ".", separator: ",")
   end

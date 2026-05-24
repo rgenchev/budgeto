@@ -1,4 +1,5 @@
 class Category < ApplicationRecord
+  belongs_to :household
   has_many :expenses, dependent: :destroy
 
   validates :name, presence: true

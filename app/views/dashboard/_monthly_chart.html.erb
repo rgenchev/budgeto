@@ -1,0 +1,25 @@
+<% max = monthly_expenses.values.max.to_f %>
+<% max = 1 if max == 0 %>
+<% cols = monthly_expenses.length %>
+
+<div class="rounded-lg bg-white shadow-sm p-6 mb-5">
+  <div class="text-sm font-medium text-gray-500 mb-4">Monthly Expenses</div>
+
+  <div style="display:grid;grid-template-columns:repeat(<%= cols %>,1fr);gap:6px;align-items:end;height:140px;">
+    <% monthly_expenses.each do |month, amount| %>
+      <% bar_px = amount > 0 ? [(amount / max * 116).round, 4].max : 2 %>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <span style="font-size:10px;font-weight:600;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;text-align:center;">
+          <%= amount > 0 ? number_to_eur(amount) : "" %>
+        </span>
+        <div style="width:100%;height:<%= bar_px %>px;background-color:#111827;border-radius:3px 3px 0 0;"></div>
+      </div>
+    <% end %>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(<%= cols %>,1fr);gap:6px;margin-top:6px;border-top:1px solid #f3f4f6;padding-top:6px;">
+    <% monthly_expenses.each_key do |month| %>
+      <div style="text-align:center;font-size:11px;color:#9ca3af;"><%= month.split(" ").first %></div>
+    <% end %>
+  </div>
+</div>
