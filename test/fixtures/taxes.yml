@@ -1,13 +1,13 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  amount: 50.00
+alice_income_tax:
+  amount: 700.00
   date: <%= Date.today.beginning_of_month.to_s %>
   note: Income tax
-  household: one
+  household: smith
+  user: alice
 
-two:
-  amount: 25.00
+carol_income_tax:
+  amount: 560.00
   date: <%= Date.today.beginning_of_month.to_s %>
-  note: Social security
-  household: one
+  note: Income tax
+  household: jones
+  user: carol

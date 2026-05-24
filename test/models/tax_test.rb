@@ -2,12 +2,17 @@ require "test_helper"
 
 class TaxTest < ActiveSupport::TestCase
   setup do
-    @household = households(:one)
+    @household = households(:smith)
   end
 
-  test "valid with amount and date" do
+  test "valid with amount, date and household" do
     tax = Tax.new(amount: 100, date: Date.today, household: @household)
     assert tax.valid?
+  end
+
+  test "invalid without household" do
+    tax = Tax.new(amount: 100, date: Date.today)
+    assert_not tax.valid?
   end
 
   test "invalid without amount" do
@@ -32,5 +37,12 @@ class TaxTest < ActiveSupport::TestCase
     tax = Tax.new(amount: -50, date: Date.today, household: @household)
     assert_not tax.valid?
     assert_includes tax.errors[:amount], "must be greater than 0"
+  end
+
+  test "user is optional" do
+    tax = Tax.new(amount: 100, date: Date.today, household: @household)
+    assert tax.valid?
+    tax.user = users(:alice)
+    assert tax.valid?
   end
 end

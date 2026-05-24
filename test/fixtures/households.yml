@@ -1,2 +1,5 @@
-one:
-  name: Test Household
+smith:
+  name: Smith Family
+
+jones:
+  name: Jones Family

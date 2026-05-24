@@ -2,12 +2,17 @@ require "test_helper"
 
 class IncomeTest < ActiveSupport::TestCase
   setup do
-    @household = households(:one)
+    @household = households(:smith)
   end
 
-  test "valid with amount and date" do
+  test "valid with amount, date and household" do
     income = Income.new(amount: 1000, date: Date.today, household: @household)
     assert income.valid?
+  end
+
+  test "invalid without household" do
+    income = Income.new(amount: 1000, date: Date.today)
+    assert_not income.valid?
   end
 
   test "invalid without amount" do
@@ -34,13 +39,15 @@ class IncomeTest < ActiveSupport::TestCase
     assert_includes income.errors[:date], "can't be blank"
   end
 
-  test "valid without note" do
-    income = Income.new(amount: 1000, date: Date.today, household: @household)
-    assert income.valid?
+  test "note is optional" do
+    assert Income.new(amount: 1000, date: Date.today, household: @household).valid?
+    assert Income.new(amount: 1000, date: Date.today, note: "Bonus", household: @household).valid?
   end
 
-  test "valid with note" do
-    income = Income.new(amount: 1000, date: Date.today, note: "January salary", household: @household)
+  test "user is optional" do
+    income = Income.new(amount: 1000, date: Date.today, household: @household)
+    assert income.valid?
+    income.user = users(:alice)
     assert income.valid?
   end
 end

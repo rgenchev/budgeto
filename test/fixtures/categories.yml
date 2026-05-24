@@ -1,9 +1,11 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+groceries:
+  name: Groceries
+  household: smith
 
-one:
-  name: Food
-  household: one
+rent:
+  name: Rent
+  household: smith
 
-two:
+transport:
   name: Transport
-  household: one
+  household: jones

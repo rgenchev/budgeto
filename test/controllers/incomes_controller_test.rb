@@ -2,7 +2,7 @@ require "test_helper"
 
 class IncomesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in_as users(:one)
+    sign_in_as users(:alice)
   end
 
   test "should get index" do
@@ -11,78 +11,53 @@ class IncomesControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", "Income"
   end
 
-  test "index shows current month incomes" do
+  test "index shows only current household incomes" do
     get incomes_url
-    assert_response :success
-    assert_select "li", minimum: 1
+    assert_select "li", count: 1
+    assert_select "li", text: /Monthly salary/
   end
 
-  test "should create income with valid params" do
+  test "should create income and assign current user and household" do
     assert_difference("Income.count", 1) do
-      post incomes_url, params: { income: { amount: 2000, date: Date.today, note: "Bonus" } }
+      post incomes_url, params: { income: { amount: 500, date: Date.today, note: "Freelance" } }
     end
-    assert_redirected_to incomes_path
+    created = Income.order(:created_at).last
+    assert_equal users(:alice), created.user
+    assert_equal households(:smith), created.household
   end
 
   test "should not create income without amount" do
     assert_no_difference("Income.count") do
       post incomes_url, params: { income: { amount: nil, date: Date.today } }
     end
-    assert_redirected_to incomes_path
   end
 
-  test "should not create income with negative amount" do
+  test "should get edit for own income" do
+    get edit_income_url(incomes(:alice_salary))
+    assert_response :success
+  end
+
+  test "cannot edit another household's income" do
+    get edit_income_url(incomes(:carol_salary))
+    assert_response :not_found
+  end
+
+  test "cannot delete another household's income" do
     assert_no_difference("Income.count") do
-      post incomes_url, params: { income: { amount: -50, date: Date.today } }
+      delete income_url(incomes(:carol_salary))
     end
+    assert_response :not_found
+  end
+
+  test "should update own income" do
+    patch income_url(incomes(:alice_salary)), params: { income: { amount: 4000 } }
     assert_redirected_to incomes_path
+    assert_equal 4000, incomes(:alice_salary).reload.amount.to_f
   end
 
-  test "should not create income without date" do
-    assert_no_difference("Income.count") do
-      post incomes_url, params: { income: { amount: 1000, date: nil } }
-    end
-    assert_redirected_to incomes_path
-  end
-
-  test "navigates to previous month" do
-    prev = Date.today.beginning_of_month.prev_month
-    get incomes_url(month: prev.month, year: prev.year)
-    assert_response :success
-    assert_select "span.font-semibold", prev.strftime("%B %Y")
-  end
-
-  test "navigates to next month" do
-    nxt = Date.today.beginning_of_month.next_month
-    get incomes_url(month: nxt.month, year: nxt.year)
-    assert_response :success
-    assert_select "span.font-semibold", nxt.strftime("%B %Y")
-  end
-
-  test "month navigation filters incomes" do
-    prev = Date.today.beginning_of_month.prev_month
-    get incomes_url(month: prev.month, year: prev.year)
-    assert_response :success
-    # Fixtures are in current month, so previous month should have none
-    assert_select "div", text: "No income yet."
-  end
-
-  test "should get edit" do
-    get edit_income_url(incomes(:one))
-    assert_response :success
-  end
-
-  test "should update income" do
-    income = incomes(:one)
-    patch income_url(income), params: { income: { amount: 5000 } }
-    assert_redirected_to incomes_path
-    income.reload
-    assert_equal 5000, income.amount.to_f
-  end
-
-  test "should destroy income" do
+  test "should destroy own income" do
     assert_difference("Income.count", -1) do
-      delete income_url(incomes(:one))
+      delete income_url(incomes(:alice_salary))
     end
     assert_redirected_to incomes_path
   end

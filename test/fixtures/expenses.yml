@@ -1,15 +1,23 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  amount: 9.99
+alice_groceries:
+  amount: 85.50
   date: <%= Date.today.beginning_of_month.to_s %>
-  note: Groceries
-  category: one
-  household: one
+  note: Weekly groceries
+  category: groceries
+  household: smith
+  user: alice
 
-two:
-  amount: 9.99
+alice_rent:
+  amount: 1200.00
   date: <%= Date.today.beginning_of_month.to_s %>
-  note: Bus ticket
-  category: two
-  household: one
+  note: Monthly rent
+  category: rent
+  household: smith
+  user: alice
+
+carol_transport:
+  amount: 45.00
+  date: <%= Date.today.beginning_of_month.to_s %>
+  note: Monthly bus pass
+  category: transport
+  household: jones
+  user: carol

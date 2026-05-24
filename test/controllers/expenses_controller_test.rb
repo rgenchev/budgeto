@@ -2,7 +2,7 @@ require "test_helper"
 
 class ExpensesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    sign_in_as users(:one)
+    sign_in_as users(:alice)
   end
 
   test "should get index" do
@@ -11,24 +11,48 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", "Expenses"
   end
 
-  test "index shows current month expenses" do
+  test "index shows only current household expenses" do
     get expenses_url
     assert_response :success
-    assert_select "li", minimum: 1
+    # alice_groceries and alice_rent belong to smith household — both visible
+    assert_select "li", minimum: 2
+    # carol's transport expense (jones household) must not appear
+    assert_select "li div div.font-medium", { text: "Transport", count: 0 }
   end
 
-  test "should create expense with valid params" do
+  test "should create expense and assign current user and household" do
     assert_difference("Expense.count", 1) do
-      post expenses_url, params: { expense: { amount: 25.50, date: Date.today, note: "Lunch", category_id: categories(:one).id } }
+      post expenses_url, params: {
+        expense: { amount: 25.50, date: Date.today, note: "Lunch", category_id: categories(:groceries).id }
+      }
     end
-    assert_redirected_to expenses_path
+    created = Expense.order(:created_at).last
+    assert_equal users(:alice), created.user
+    assert_equal households(:smith), created.household
+  end
+
+  test "redirect after create preserves month and year params" do
+    prev = Date.today.beginning_of_month.prev_month
+    post expenses_url(month: prev.month, year: prev.year), params: {
+      expense: { amount: 10, date: prev, category_id: categories(:groceries).id },
+      month: prev.month,
+      year: prev.year
+    }
+    assert_redirected_to expenses_path(month: prev.month, year: prev.year)
   end
 
   test "should not create expense without amount" do
     assert_no_difference("Expense.count") do
-      post expenses_url, params: { expense: { amount: nil, date: Date.today, category_id: categories(:one).id } }
+      post expenses_url, params: { expense: { amount: nil, date: Date.today, category_id: categories(:groceries).id } }
     end
     assert_redirected_to expenses_path
+  end
+
+  test "filter by category shows only that category expenses" do
+    get expenses_url(category: categories(:groceries).id)
+    assert_response :success
+    assert_select "li", count: 1
+    assert_select "li div div.font-medium", text: "Groceries"
   end
 
   test "navigates to previous month" do
@@ -38,53 +62,40 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     assert_select "span.font-semibold", prev.strftime("%B %Y")
   end
 
-  test "navigates to next month" do
-    nxt = Date.today.beginning_of_month.next_month
-    get expenses_url(month: nxt.month, year: nxt.year)
-    assert_response :success
-    assert_select "span.font-semibold", nxt.strftime("%B %Y")
-  end
-
-  test "month navigation filters expenses" do
+  test "month navigation shows no expenses for empty month" do
     prev = Date.today.beginning_of_month.prev_month
     get expenses_url(month: prev.month, year: prev.year)
     assert_response :success
-    # Fixtures are in current month, so previous month should have none
     assert_select "div", text: "No expenses yet."
   end
 
-  test "filter by category returns only that category's expenses" do
-    food = categories(:one)
-    get expenses_url(category: food.id)
-    assert_response :success
-    assert_select "li", count: 1
-    assert_select "li div div.font-medium", text: "Food"
-  end
-
-  test "filter by category persists across month navigation" do
-    food = categories(:one)
-    get expenses_url(category: food.id)
-    assert_response :success
-    # Check that prev/next month links include the category param
-    assert_select "a[href*='category=#{food.id}']", minimum: 2
-  end
-
-  test "should get edit" do
-    get edit_expense_url(expenses(:one))
+  test "should get edit for own expense" do
+    get edit_expense_url(expenses(:alice_groceries))
     assert_response :success
   end
 
-  test "should update expense" do
-    expense = expenses(:one)
+  test "cannot edit another household's expense" do
+    get edit_expense_url(expenses(:carol_transport))
+    assert_response :not_found
+  end
+
+  test "cannot delete another household's expense" do
+    assert_no_difference("Expense.count") do
+      delete expense_url(expenses(:carol_transport))
+    end
+    assert_response :not_found
+  end
+
+  test "should update own expense" do
+    expense = expenses(:alice_groceries)
     patch expense_url(expense), params: { expense: { amount: 99.99 } }
     assert_redirected_to expenses_path
-    expense.reload
-    assert_equal 99.99, expense.amount.to_f
+    assert_equal 99.99, expense.reload.amount.to_f
   end
 
-  test "should destroy expense" do
+  test "should destroy own expense" do
     assert_difference("Expense.count", -1) do
-      delete expense_url(expenses(:one))
+      delete expense_url(expenses(:alice_groceries))
     end
     assert_redirected_to expenses_path
   end

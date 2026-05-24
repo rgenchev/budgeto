@@ -1,11 +1,13 @@
-one:
-  amount: 3000.00
+alice_salary:
+  amount: 3500.00
   date: <%= Date.today.beginning_of_month.to_s %>
   note: Monthly salary
-  household: one
+  household: smith
+  user: alice
 
-two:
-  amount: 500.00
+carol_salary:
+  amount: 2800.00
   date: <%= Date.today.beginning_of_month.to_s %>
-  note: Freelance project
-  household: one
+  note: Monthly salary
+  household: jones
+  user: carol
