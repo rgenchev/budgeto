@@ -5,9 +5,11 @@ one:
   date: <%= Date.today.beginning_of_month.to_s %>
   note: Groceries
   category: one
+  household: one
 
 two:
   amount: 9.99
   date: <%= Date.today.beginning_of_month.to_s %>
   note: Bus ticket
   category: two
+  household: one

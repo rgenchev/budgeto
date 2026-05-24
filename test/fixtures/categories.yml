@@ -2,6 +2,8 @@
 
 one:
   name: Food
+  household: one
 
 two:
   name: Transport
+  household: one

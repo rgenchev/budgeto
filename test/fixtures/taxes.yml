@@ -4,8 +4,10 @@ one:
   amount: 50.00
   date: <%= Date.today.beginning_of_month.to_s %>
   note: Income tax
+  household: one
 
 two:
   amount: 25.00
   date: <%= Date.today.beginning_of_month.to_s %>
   note: Social security
+  household: one
