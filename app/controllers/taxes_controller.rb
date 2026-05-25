@@ -10,7 +10,13 @@ class TaxesController < ApplicationController
 
     range = @current_date.beginning_of_month..@current_date.end_of_month
 
-    @tax = Tax.new(date: Date.today)
+    default_date = if @current_date.month == Date.today.month && @current_date.year == Date.today.year
+      Date.today
+    else
+      Current.household.taxes.where(date: range).maximum(:date) || @current_date.beginning_of_month
+    end
+
+    @tax = Current.household.taxes.build(date: default_date)
 
     @taxes = Current.household.taxes
       .where(date: range)

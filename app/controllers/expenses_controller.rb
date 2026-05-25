@@ -16,7 +16,7 @@ class ExpensesController < ApplicationController
       Current.household.expenses.where(date: range).maximum(:date) || @current_date.beginning_of_month
     end
 
-    @expense = Expense.new(date: default_date)
+    @expense = Current.household.expenses.build(date: default_date)
     @categories = Current.household.categories.order(:name)
 
     @expenses = Current.household.expenses

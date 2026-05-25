@@ -10,7 +10,13 @@ class IncomesController < ApplicationController
 
     range = @current_date.beginning_of_month..@current_date.end_of_month
 
-    @income = Income.new(date: Date.today)
+    default_date = if @current_date.month == Date.today.month && @current_date.year == Date.today.year
+      Date.today
+    else
+      Current.household.incomes.where(date: range).maximum(:date) || @current_date.beginning_of_month
+    end
+
+    @income = Current.household.incomes.build(date: default_date)
 
     @incomes = Current.household.incomes
       .where(date: range)
